@@ -1,9 +1,47 @@
-import { View, Text } from 'react-native';
+import { useInfiniteQuery } from '@tanstack/react-query';
+
+import { getProductsByPage } from '../../../actions/products/get-products-by-page';
+
+import MainLayout from '../../layouts/MainLayout';
+import FullScreenLoader from '../../components/ui/FullScreenLoader';
+import ProductList from '../../components/products/ProductList';
 
 export const HomeScreen = () => {
+  // const { isLoading, data: products = [] } = useQuery({
+  //   queryKey: ['products', 'infinite'],
+  //   staleTime: 1000 * 60 * 60, // 1 hour
+  //   queryFn: async () => getProductsByPage(0),
+  // });
+
+  const {
+    isLoading,
+    data: products,
+    fetchNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['products', 'infinite'],
+    staleTime: 1000 * 60 * 60, // 1 hour
+    initialPageParam: 0,
+
+    queryFn: async params => await getProductsByPage(params.pageParam),
+
+    getNextPageParam: (lastPage, allPages) => allPages.length,
+  });
+
   return (
-    <View>
-      <Text>HomeScreen</Text>
-    </View>
+    <MainLayout
+      title="TesloShop - Products"
+      subtitle="Product maintenance"
+      rightAction={() => {}}
+      rightActionIcon="plus-outline"
+    >
+      {isLoading ? (
+        <FullScreenLoader />
+      ) : (
+        <ProductList
+          products={products?.pages.flat() ?? []}
+          fetchNextPage={fetchNextPage}
+        />
+      )}
+    </MainLayout>
   );
 };
