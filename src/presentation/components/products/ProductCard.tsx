@@ -31,7 +31,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         />
       )}
 
-      <Text numberOfLines={2} style={{ textAlign: 'center' }}>
+      <Text numberOfLines={2} style={{ textAlign: 'center', color: 'black' }}>
         {product.title}
       </Text>
     </Card>

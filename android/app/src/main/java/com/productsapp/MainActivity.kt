@@ -1,5 +1,6 @@
 package com.productsapp
 
+import android.os.Bundle
 import com.swmansion.rnscreens.fragment.restoration.RNScreensFragmentFactory
 
 import com.facebook.react.ReactActivity
